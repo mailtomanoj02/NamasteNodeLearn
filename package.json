@@ -1,0 +1,22 @@
+{
+  "name": "namstenodelearn",
+  "version": "1.0.0",
+  "description": "Node learn",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "author": "Manoj S",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.12.0",
+    "mongodb-topology-manager": "^2.1.0",
+    "mongoose": "^8.9.6",
+    "validator": "^13.12.0"
+  }
+}
