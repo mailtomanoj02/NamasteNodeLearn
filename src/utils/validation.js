@@ -32,7 +32,7 @@ const loginValidation = (body) => {
 };
 
 const validateEditProfiledata = (body) => {
-  const restrictedFields = ["emailId"];
+  const restrictedFields = ["emailId", "password"];
   if (Object.keys(body).some((key) => restrictedFields.includes(key))) {
     throw new Error(
       "Cannot update the fields in the list: " + restrictedFields

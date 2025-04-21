@@ -10,7 +10,11 @@ const profileRouter = require("express").Router();
 profileRouter.get("/profile", userAuth, async (req, res) => {
   try {
     const user = req.user;
-    res.send(user);
+    if (user) {
+      res.send({ outcome: "success", data: user });
+    } else {
+      throw new Error("User not found");
+    }
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -24,6 +28,7 @@ profileRouter.patch("/profile", userAuth, async (req, res) => {
     console.log("==>", user, body);
     const updatedData = await UserModel.findByIdAndUpdate(user._id, body, {
       returnDocument: "after",
+      runValidators: true,
     });
     res.json({ message: "Profile updated Successfully", user: updatedData });
   } catch (err) {

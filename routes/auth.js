@@ -19,8 +19,12 @@ authRouter.post("/signup", async (req, res) => {
       age,
       gender,
     }); //creating an instance of UserModel
-    await user.save();
-    res.send("User created successfully");
+    const savedUser = await user.save();
+    const token = await savedUser.getJwt();
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 900000 * 2000),
+    });
+    res.json({ outcome: "success", data: savedUser });
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -37,9 +41,19 @@ authRouter.post("/login", async (req, res) => {
       console.log(token);
       if (isPasswordMatched) {
         res.cookie("token", token, {
-          expires: new Date(Date.now() + 900000),
+          expires: new Date(Date.now() + 900000 * 2000),
         });
-        res.send("Login Success");
+        res.json({
+          outcome: "success",
+          data: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            emailId: user.emailId,
+            id: user._id,
+            gender: user.gender || "",
+            photoUrl: user.photoUrl || "",
+          },
+        });
       } else {
         res.status(401).send("Invalid credentials");
       }
@@ -53,9 +67,11 @@ authRouter.post("/login", async (req, res) => {
 
 authRouter.post("/logout", async (req, res) => {
   try {
-    res.clearCookie("token").send("Logged out successfully");
+    res
+      .clearCookie("token")
+      .send({ outcome: "success", message: "Logged out successfully" });
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).send({ outcome: "failed", error: err.message });
   }
 });
 

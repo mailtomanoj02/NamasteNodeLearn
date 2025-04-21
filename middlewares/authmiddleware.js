@@ -4,6 +4,11 @@ const privateKey = "Manoj@123@NamasteNodeJs";
 const userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
+    if (!token) {
+      return res
+        .status(401)
+        .send({ outcome: "failed", message: "Unauthorized" });
+    }
     const decoded = jwt.verify(token, privateKey);
     console.log(decoded);
     if (!decoded?.userId) {
